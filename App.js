@@ -1,14 +1,48 @@
 /** App.js **/
 
-import ContextWrapper from "../components/ContextWrapper";
-import { Text } from "react-native";
-import Layout from "../components/Layout";
+import React, {useEffect, useState} from 'react';
+import styled from 'styled-components';
+import {
+  Layout,
+  ContextProvider,
+  Title,
+  Subtitle,
+  Pillow,
+  Switch,
+} from 'components';
+import * as Font from 'expo-font';
 
-export default () => (
-    <ContextWrapper>
+const AUTHOR_NAME = 'C3sar\nR0driguez';
+const TitleContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export default () => {
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  async function loadFont() {
+    await Font.loadAsync({
+      Kusogi: require('assets/fonts/Kosugi-Regular.ttf'),
+    });
+    setFontLoaded(true);
+  }
+
+  useEffect(() => {
+    loadFont();
+  }, []);
+
+  return fontLoaded ? (
+    <ContextProvider>
       <Layout>
-        C3sar R0driguez -
-        <Text>FullStack Software Engineer</Text>
+        <TitleContainer>
+          <Title>{AUTHOR_NAME}</Title>
+          <Pillow />
+        </TitleContainer>
+        <Subtitle>FullStack Software Engineer</Subtitle>
+        <Switch />
       </Layout>
-    </ContextWrapper>
-);
+    </ContextProvider>
+  ) : null;
+};
